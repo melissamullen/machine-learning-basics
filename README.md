@@ -1,14 +1,11 @@
-### Table of Contents
+# Machine Learning Basics
 
-- [What is this project?](#what-is-this-project)
+- [Project Overview](#project-overview)
 - [Definitions](#definitions)
 - [The History of Machine Learning](#the-history-of-machine-learning)
 
-<br>
 
-# Machine Learning Basics
-
-## What is this project?
+## Project Overview
 
 This project is a collection of machine learning models organized by the following subcategories:
 * supervised / unsupervised / semisupervised / reinforcement
