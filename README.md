@@ -1,21 +1,21 @@
 # The History of Machine Learning
 
-**Definitions:** 
+## Definitions
 
 * The field of *Artificial Intelligence* seeks to automate intellectual tasks normally performed by humans.
 
 * *Machine Learning*: A machine learning model transforms its input data into meaningful outputs, a process that is "learned" from exposure to known examples of inputs and outputs. Therefore, the central problem in machine learning is to meaningfully transform data. That is, to learn useful representations of the input data. They are useful in the sense that they allow simple rules to solve the problem in that representation space. "Learning" describes an automatic search process for useful data transformations – ones that produce representations of the input data that are amenabele to simpler rules solving the task at hand – guided by some feedback signal. This search for useful transformations is over a predefined space of possibilities.
 
-**Timeline**
+## Timeline
 
 **1944**: *Logistic Regression* is a machine learning classification algorithm introduced in 1944.
 
 
 **1950s**: 
 
-    * Alan Turing published his landmark paper, "Computing Machinery and Intelligence". Turing was of the opinion – highly provocative at the time – that computers could in principle be made to emulate all aspects of human intelligence.
-
-    * The core ideas of neutral networks were first investigated in toy form, but the approach took decades to get started. A *neural network* is a multi-stage data transformation pipeline, where each layer performs some transformation. The specification of what a layer does to its input data is stored in the layer's weights (parameters), which in essence are a bunch of numbers. So in this context, "learning" means finding a set of values for the weights of all layers in a network such that the network will correctly map example inputs to their associated targets. Neural networks can contain tens of millions of parameters. Initially, the weights of the network are assigned random values. A *loss function* is a function that computes a distance score between a prediction of the network and the true target, capturing how well the network has done on this specific example. The fundamental trick in deep learning is to use that score as a feedback signal to adjust the value of the weights a little, in a direction that will lower the loss score for the current example. That adjustment is the job of the *optimizer*, which implements what's called the *Backpropogation algorithm*: the central algorithm in deep learning. The weights are continually adjusted in this training loop until the loss score is minimized, and the network is trained.
+   * Alan Turing published his landmark paper, "Computing Machinery and Intelligence". Turing was of the opinion – highly provocative at the time – that computers could in principle be made to emulate all aspects of human intelligence.
+     
+   * The core ideas of neutral networks were first investigated in toy form, but the approach took decades to get started. A *neural network* is a multi-stage data transformation pipeline, where each layer performs some transformation. The specification of what a layer does to its input data is stored in the layer's weights (parameters), which in essence are a bunch of numbers. So in this context, "learning" means finding a set of values for the weights of all layers in a network such that the network will correctly map example inputs to their associated targets. Neural networks can contain tens of millions of parameters. Initially, the weights of the network are assigned random values. A *loss function* is a function that computes a distance score between a prediction of the network and the true target, capturing how well the network has done on this specific example. The fundamental trick in deep learning is to use that score as a feedback signal to adjust the value of the weights a little, in a direction that will lower the loss score for the current example. That adjustment is the job of the *optimizer*, which implements what's called the *Backpropogation algorithm*: the central algorithm in deep learning. The weights are continually adjusted in this training loop until the loss score is minimized, and the network is trained.
 
 
 * **1956**: John McCarthy, then a young Assistant Professor of Mathematics at Dartmouth College organized a summer workshop under the following proposal:
