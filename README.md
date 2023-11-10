@@ -1,4 +1,21 @@
-# The History of Machine Learning
+### Table of Contents
+
+- [What is this project?](#what-is-this-project)
+- [Definitions](#definitions)
+- [The History of Machine Learning](#the-history-of-machine-learning)
+
+<br>
+
+# Machine Learning Basics
+
+## What is this project?
+
+This project is a collection of machine learning models organized by the following subcategories:
+* supervised / unsupervised / semisupervised / reinforcement
+* classification / regression / clustering / dimensionality reduction / anomaly detection / ensemble models / generative AI
+* linear / nonlinear
+
+It is still a work in progress, so not all subcategories are covered.
 
 ## Definitions
 
@@ -6,7 +23,11 @@
 
 * *Machine Learning*: A machine learning model transforms its input data into meaningful outputs, a process that is "learned" from exposure to known examples of inputs and outputs. Therefore, the central problem in machine learning is to meaningfully transform data. That is, to learn useful representations of the input data. They are useful in the sense that they allow simple rules to solve the problem in that representation space. "Learning" describes an automatic search process for useful data transformations – ones that produce representations of the input data that are amenabele to simpler rules solving the task at hand – guided by some feedback signal. This search for useful transformations is over a predefined space of possibilities.
 
-## Timeline
+## The History of Machine Learning
+
+Being familiar with the history of machine learning and understanding the context in which models were developed is both helpful and informative. Not only does the historical context provide a solid foundation for understanding today's cutting-edge models, but it demonstrates the remarkable speed at which this technology is developing.
+
+### Timeline
 
 **1944**: *Logistic Regression* is a machine learning classification algorithm introduced in 1944.
 
