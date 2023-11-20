@@ -3,8 +3,7 @@
 - [Project Overview](#project-overview)
 - [Definitions](#definitions)
 - [The History of Machine Learning](#the-history-of-machine-learning)
-- [The Math Behind Machine Learning](#the-math-behind-machine-learning)
-  - [Linear Algebra](#linear-algebra)
+
 ## Project Overview
 
 This project is a collection of machine learning models organized by the following subcategories:
