@@ -116,12 +116,16 @@ Being familiar with the history of machine learning and understanding the contex
 
     * Deep learning started to completely replace SVMs and decision trees in a wide range of applications. 
 
+    * 2013: Surprisingly, these early successes weren't enough make make deep learning mainstream at the time. It still faced intense skepticism from many senior computer vision researchers.
+
 * **2014**: *Gradient Boosting Machines* took over as the best algorithm for any shallow machine learning task. A gradient boosting machine is like random forest, but it uses gradient boosting, as a way to improve the model by iteratively training new models that specialize in addressing the weak points of the previous models. It is still the best algorithm for dealing with nonperceptual data today.
 
 
 * **2015**: The Keras library was released and quickly became the go-to deep learning solution.
 
 * **2016**: 
+
+    * Deep learning became dominant.
 
     * Google revealed its Tensor Processing Unit (TPU) project – a new chip design developed from the ground up to run deep neural networks significationly faster and far more energy efficiently than top-of-the-line GPUs. TPU cards are designed for be assembled into large-scale configureations called "pods".
 
