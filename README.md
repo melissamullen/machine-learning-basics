@@ -308,7 +308,7 @@ It's possible to automate a large chunk of this work by using automated hyperpar
 - Tuning the configuration of the model based on its performance on the validation set can quickly result in overfitting to the validation set, even though your model is never directly trained on it.
 
 ###### What To Do If Training Won't Start
-If you loss stops decreasing (or never started to), this is *always* something you can overcome. Remember that you can fit a model to random data (the model just memorizes the mappings).
+If your loss stops decreasing (or never started to), this is *always* something you can overcome. Remember that you can fit a model to random data (the model just memorizes the mappings).
 
 1. Lower or increase the learning rate
   - A learning rate that is too high may lead to updates that vastly overshoot a proper fit
