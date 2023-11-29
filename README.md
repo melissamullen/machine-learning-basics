@@ -26,12 +26,24 @@
       - [How to deploy a model on a personal device](#how-to-deploy-a-model-on-a-personal-device)
       - [How to optimize your model](#how-to-optimize-your-model)
   - [4. Monitor your model in the wild](#4-monitor-your-model-in-the-wild)
+- [Deep Learning for Computer Vision](#deep-learning-for-computer-vision)
+  - [Convolutional Neural Networks](#convolutional-neural-networks)
+  - [How to Train a Covnet Without Much Data](#how-to-train-a-convnet-without-much-data)
+    - [Data Augmentation](#data-augmentation)
+    - [Feature extraction from a pretrained model](#feature-extraction-from-a-pretrained-model)
+    - [Fine-tuning a pretrained model](#fine-tuning-a-pretrained-model)
+  - [Convnet Architectural Patterns](#convnet-architectural-patterns)
+    - [Blocks of layers](#blocks-of-layers)
+    - [Residual connections](#residual-connections)
+    - [Batch normalization](#batch-normalization)
+    - [Depthwise separable convolutions](#depthwise-separable-convolutions)
+  - [How To Interpret What A Convnet Learns](#how-to-interpret-what-a-convnet-learns)
+    - [How to visualize intermediate convnet outputs](#how-to-visualize-intermediate-convnet-outputs)
+    - [How to visualize convnet filters](#how-to-visualize-convnet-filters)
+    - [How to visualize heatmaps of class activation within an image](#how-to-visualize-heatmaps-of-class-activation-within-an-image)
 - [Reference](#reference)
   - [How To Improve Generalization](#how-to-improve-generalization)
   - [Last-layer activation and loss functions for different tasks](#last-layer-activation-and-loss-functions-for-different-tasks)
-
-
-
 
 ## Project Overview
 
@@ -76,19 +88,29 @@ Being familiar with the history of machine learning and understanding the contex
 * **1960s**: 
 
     * The *Naive Bayes algorithm* is a machine learning classifier introduced in the 1960s that applies Bayes' theorem while assuming that the features in the input data are all indepdenent.
+    * Early attempts were made to build NLP systems through the lens of "applied linguistics". Engineers and linguists would handcraft complex sets of rules to perform basic machine translation or create simple chatbots (the famous ELIZA program used pattern matching to sustain very basic conversation).
     
     * 1963: An older linear formulation of *Support Vector Machines (SVMs)* was published. SVM is a classification algorithm that works by finding "decision boundaries" separating two classes by 1) mapping to a new high-dimensional representation (using a *kernel function* - a function that maps any two points in your initial space to the distance between these points in your target representation space, bypassing the explicit computation of the new representation) where the decision boundary can be expressed as a hyperplane and 2) maximizing  the distance between the hyperplane and the closest data points from each class (*maximizing the margin*).
 
 
-* **1980s**: The *Backpropagation algorithm*, a way to train chains of parametric operatioins using gradient-descent optimization, was rediscovered and applied to neural networks.
+* **1980s**:
+
+    * We started seeing machine learning approaches to natural language processing (using a corpus of data to automate the process of finding rules). The earliest ones were based on decision trees - the intent was literally to automate the development of the kind of if/then/else rules of previous systems. Statistical approaches to NLP started gaining speed, starting with logistic regression. Over time, learned parametric models fully took over, and linguistics came to be seen as more of a hindrance than a useful tool.
+
+    * The *Backpropagation algorithm*, a way to train chains of parametric operatioins using gradient-descent optimization, was rediscovered and applied to neural networks.
 
     * 1989: Yann LeCun at Bell Labs introduced LeNet for classifying handwritten digits. It was used by the United States Postal Service in the 1990s to automate the the reading of ZIP codes on mail envelopes.
 
-* **1990s**: *Machine Learning*, started to flourish. It has quickly become the most popular and most successful subfield of AI, a trend driven by the availability of faster hardware and larger datasets. 
+* **1990s**:
+
+    * *Machine Learning*, started to flourish. It has quickly become the most popular and most successful subfield of AI, a trend driven by the availability of faster hardware and larger datasets. 
+
+    * The toolset of NLP (decision trees and logistic regression) only saw slow evolution from the 1990s to the early 2010s. Most of the research focus was on feature engineering.
 
     * 1995: Bell Labs published the modern formulation of *Support Vector Machines (SVMs)*. They were well understood and easily intrepretable, so they became extremely popular in the field for a long time. But they were hard to scale and didn't provide good results for preceptual problems such as image classification because of the *feature engineering* required (extracting useful representations manually)
 
-    * 1997: *The Long Short-Term Memory (LSTM) algorithm*, fundamental to deep learning for time series data, was developed.
+    * 1997: *The Long Short-Term Memory (LSTM) algorithm*, fundamental to deep learning for time series data, was developed. But it stayed under the radar until 2014
+      
 
 * **Early 2000s**: *Decision Trees*, flowchart-like structures that let you classify input data, began to receive significant research interest. By the end of the decade they were often preferred to kernel methods. The *Random Forest* algorithm was introduced, which involves building a large number of specialized decision trees and then ensembling their outputs.
 
@@ -118,8 +140,11 @@ Being familiar with the history of machine learning and understanding the contex
 
     * 2013: Surprisingly, these early successes weren't enough make make deep learning mainstream at the time. It still faced intense skepticism from many senior computer vision researchers.
 
-* **2014**: *Gradient Boosting Machines* took over as the best algorithm for any shallow machine learning task. A gradient boosting machine is like random forest, but it uses gradient boosting, as a way to improve the model by iteratively training new models that specialize in addressing the weak points of the previous models. It is still the best algorithm for dealing with nonperceptual data today.
+* **2014**:
 
+    * *Gradient Boosting Machines* took over as the best algorithm for any shallow machine learning task. A gradient boosting machine is like random forest, but it uses gradient boosting, as a way to improve the model by iteratively training new models that specialize in addressing the weak points of the previous models. It is still the best algorithm for dealing with nonperceptual data today.
+
+    * Multiple researchers began to investigate the language-understanding capabilities of recurrent neural networks, in particular LSTM - a seuqence-processing algorithm from the late 1990s that had stayed under the radar until then.
 
 * **2015**: The Keras library was released and quickly became the go-to deep learning solution.
 
@@ -134,11 +159,13 @@ Being familiar with the history of machine learning and understanding the contex
         * Residual connections
         * Depthwise separable convolutions)
 
+    * Recurrent neural networks dominated the booming NLP scene. *Bidirectional LSTM* models in particular set the state of the art on many important tasks (summarization, Q&A, machine translation)
 
 
 * **2016-2020**: The entire machine learning and data science industry has been dominated by deep learning (for percentual problems) and gradient boosted trees (when structured data is available).
 
-* **2017**: Transformer-based deep learning models for natural language processing (such as BERT, GPT-3) were developed and revolutionized the field.
+* **2017**: A new architecture rose to replace RNNs: *Transformers*. Transformer-based deep learning models for natural language processing (such as BERT, GPT-3) were developed and revolutionized the field. Today, most NLP systems are based on them.
+
 
 ## The Reason Machine Learning Works: The Manifold Hypothesis
 
@@ -364,6 +391,175 @@ You can use the TensorFlow Model Optimization Toolkit to help optimize the model
   - Watch out for changes in the production data (new features? expand label set?)
   - Keep collecting an dannotating data (pay special attention to collecting samples that seem to be difficult for you current model to classify - such samples are the most likely to help improve performance.
 
+# Machine Learning Models
+
+## Linear Regression
+
+## Polynomial Regression
+
+## Logistic Regression
+
+## Support Vector Machine (SVM)
+
+## Naive Bayes
+
+## Decision Tree
+
+## Random Forest
+
+## Gradient Boosting
+
+## K-means Clustering
+
+## K Nearest Neighbor (KNN) Clustering
+
+## PCA
+
+## Kernel PCA
+
+# Deep Learning for Computer Vision
+
+## Convolutional Neural Networks
+- Covnets are the type of deep learning model that is now used almost universally in computer vision applications.
+- A covnet takes as input tensors of shape (image_height, image_width, image_channels), not including the batch dimension.
+- The width and heigh dimensions tend to shrinnk as you go deeper in the model.
+- The number of channels is controlled by the first argument passed into the Conv2D layers.
+- The fundamental difference between a densely connected layer and a convolutional layer is this: 
+    - **Dense layers learn global patterns in their input feature space, whereas convolutional layers learn local patterns.**
+- The patterns covnets learn are translation invariant (a pattern learned in the bottom left corner will be recognized anywhere in the image)
+- A first convolutional layer will learn small local patterns (edges)
+    - A second convolutional layer will learn larger patterns made of the features of the first layer
+    - A second convolutional layer will learn even larger patterns made of the features of the second layer
+    - so on...
+- **Input**: The rank-3 input tensor of shape `(height, width, depth)` over which the convolution operates.
+- **Convolution**: An operation that is applied over all patches of `window_size` (usually 3x3) in the input
+- **Output feature map**: The rank-3 tensor produced after the convolution is applied to the input of size `(height, width, depth)`.
+- **Feature**: A 2D spatial map of the response of a patch in the input layer to the convolution. Every dimension in the depth axis of the output feature map is a feature. Features encode specific aspects of the input data, for example "presence of a face".
+- In Keras Conv2D layers, the first parameter passed is the desired depth of the output feature map (number of features computed). The second is the convolutional window height and width.
+- A convolution works by sliding the window over the 3D input, stopping at every possible location, and extracting the 3D patch. Each such 3D patch (of size `(window_height, window_width, depth)`) is then transformed into a 1D vector of shape `(num_features,)`, which is done via a tensor product with a learned weight matrix called the **convolutional kernel**. The same kernel is used across every patch.
+- All of these vectors (one per patch) are then spatially reassembled into a 3D output map of shape `(height, width, num_features)`. Every spatial location in the output feature map corresponds to the same location in the input feature map (the with 3x3 windows, the vector `output[i, j, :]` comes from the 3D patch `input[i-1:i+1, j-1:j+1, :]`).
+- The output width and height may differ from the input wideth and height because of **border effects** (which can be countered by **padding** the input feature map) or if the **stride** (distance between two successive windows) is greater than 1 (**"strided convolutions"**). A stride of 2 would mean the width and height are downsampled by a factor of 2. Strides are rarely used in classification models. In classification models, instead of strides, we tend to use the max-pooling operation to downsample feature maps.
+- Convolutional layers usually have 3x3 windows with stride of 1, and the input is transformed via a learned convolutional kernel.
+- Max Pooling layers are usually 2x2 windows with stride of 2, and the input is transformed via a hardcoded max tensor operation.
+- **Downsampling makes the model more generalizable** 
+    - Downsampling reduces the number of parameters (and therefore reduces overfitting).
+    - Downsampling ensures that the high-level patterns learned won't be very small compared to the initial input.
+- A convet essentially converts images into feature maps:
+    - Conv2D layers increase the number of feature maps (using the filters parameter) --> You should double the number of filters in each successive Conv2D layer.
+    - MaxPooling layers decrease the size of the feature maps by a factor of 2 (since window size is 2x2 and stride=2)
+    - (Conv2D layers will also decrease the size of the feature maps a small amount if you don't add padding)
+
+## How To Build a Covnet
+
+- Double the number of filters in each successive Conv2D layer
+- If you have big images, use a larger model (with more layers) – bigger images need more representational power.
+
+## How To Train A Convnet Without Much Data
+
+- If you have relatively few training samples, overfitting should be your number one concern. 
+- **Overfitting is caused by having too few samples to learn from, rendering you unable to train a model that can generalize to new data. Given infinite data, your model would be exposed to every possible aspect of the data distribution and you would never overfit.** 
+- Always use data augmentation (this is especially important when you don't have much data).
+
+### Data Augmentation
+
+- Data augmentation generates more training data from existing training samples by augmenting the samples via a number of random transformations that yield beilievable-looking images. The goal is that at training time, your model will never see the exact same picture twice. 
+- But the inputs it sees are still heavily intercorrelated - we can't produce new information, we can only remix existing information. So this may not be enough to completely get ride of overfitting. Add dropout too right before the densely connected classifier. 
+- Just like dropout, image augmentation layers are inactive during inference, so during evaluation our model will behave just the same as when it did not include those layers.
+
+### Feature extraction from a pretrained model
+
+### Fine-tuning a pretrained model
+
+## Convnet Architectural Patterns
+
+### Blocks of layers
+
+### Residual connections
+
+### Batch normalization
+
+### Depthwise separable convolutions
+
+## How To Interpret What A Convnet Learns
+
+- Convnets are the opposite of blackboxes!
+
+### How to visualize intermediate convnet outputs
+
+### How to visualize convnet filters
+
+### How to visualize heatmaps of class activation within an image
+
+# Deep Learning for Timeseries
+
+## Recurrent Neural Networks
+
+- An RNN processes sequences by iterating through the sequence elements and maintaining a state that contains informatioin relative to what it has seen so far. In effect, it is a type of neural network that has an internal loop.
+- An RNN is a for loop that reuses quantities computed during the previous iteration of the loop, nothing more.
+
+## Long Short-Term Memory
+
+- An LSTM saves information for later, thus preventing older signals from gradually vanishing during processing
+- For this reason, LSTM works better on long sequences than a naive RNN
+
+## How To Fight Overfitting In Recurrent Layers
+
+### Recurrent dropout
+- Recurrent dropout (like dropout) breaks happenstance correlations, so the model has to train for more epochs in order to converge
+- It has long been known that applying dropout before a recurrent layer hinders learning - instead, the same dropout mask (the same pattern of dropped units) should be applied at every timestep. This is recurrent dropout.
+- Gated Recurrent Units (GRU) layers are a slightly simpler version of the LSTM architecture
+
+## How To Improve The Performance Of An RNN
+
+### Bidirectional RNN
+
+- A common RNN variant that is frequently used in NLP. The "swiss army knife" of NLP.
+- Although word order matters in understanding language, *which order* (forwards or backwards) use you isn't critical.
+- Uses two regular RNNs (such as GRU and LSTM layers) each of which processes the input sequence in one direction (chronologically and antichronologically) and then merges their representations.
+- By processing a sequence both ways, a bidirectional RNN can catch patterns that might otherwise be overlooked.
+- DO use bidirectional RNNs for text.
+- DO NOT use bidirectional RNNs for timeseries data where data from the recent past matters more.
+- In Keras, the Bidirectional layer takes as its first argument a recurrent layer. It creates a second separate instance of this recurrent layer and uses one instance for processing the input sequences in chronological order and the other instance for processing the input sequences in reversed order. (e.g. `layers.Bidirectional(layers.LSTM(16))(inputs))
+
+## Other suggestions:
+- Adjust the number of units in each recurrent layer
+- Adjust the amount of dropout
+- Adjust the learning rate used by the optimizer
+- Try a different optimizer
+- Try using a stack of layers as the regressor on top of the recurrent layer, instead of a single Dense layer
+- Improve the input to the model:
+  - Try using longer or shorter sequences
+  - Try a different sampling rate
+  - Start doing feature engineering
+
+
+# Natural Language Processing
+
+## Preprocessing
+
+### Standardization
+
+### Tokenization
+
+### Vocabulary Indexing (Vectorizing)
+
+## RNN Architecture for NLP
+
+## The Transformer Architecture
+
+### Self attention
+
+### Multihead attention
+
+### The Transformer encoder
+
+### Sequence-to-Sequence Learning
+
+## When To Use Different NLP Models
+
+# Generative Deep Learning
+
+
 # Reference
 
 ## How To Improve Generalization
@@ -379,11 +575,20 @@ You can use the TensorFlow Model Optimization Toolkit to help optimize the model
 
 ## Last-layer activation and loss functions for different tasks
 
-| Problem type      | Last-layer activation | Loss function | 
-| ----------- | ----------- | ----------- |
-| Binary classification      | sigmoid       | binary_crossentropy        |
-| Multiclass, single-label classification    | softmax       | categorical cross-entropy        |
-| Multiclass, multi-label classification    | sigmoid       | binary_crossentropy        |
-
-
+| Algorithm / Technique    | Activation Function(s)  | Loss Function(s)            | Metrics                                 |
+|--------------------------|-------------------------|-----------------------------|------------------------------------------|
+| Linear Regression        | None (Identity function) | Mean Squared Error (MSE)   | Mean Absolute Error (MAE), R-squared   |
+| Polynomial Regression    | None (Identity function) | Mean Squared Error (MSE)   | Mean Absolute Error (MAE), R-squared   |
+| Logistic Regression      | Sigmoid                 | Binary Cross-Entropy (Log Loss) | Accuracy, Precision, Recall, F1-score |
+| Single-Label Binary Classification    | Sigmoid                      | Binary Cross-Entropy (Log Loss) | Accuracy, Precision, Recall, F1-score |
+| Single-Label Multiclass Classification | Softmax                      | Categorical Cross-Entropy      | Accuracy, Precision, Recall, F1-score |
+| Support Vector Machine   | Kernel Functions (e.g., RBF) | Hinge Loss (SVM)         | Accuracy, Precision, Recall, F1-score |
+| Naive Bayes              | Not applicable         | Maximum Likelihood Estimation | Accuracy, Precision, Recall, F1-score |
+| Decision Tree            | Various (e.g., ReLU, Sigmoid) | Gini Index (for Classification), Mean Squared Error (for Regression) | Accuracy, Precision, Recall, F1-score (for Classification), Mean Squared Error (for Regression) |
+| Random Forest            | Various (e.g., ReLU, Sigmoid) | Gini Index (for Classification), Mean Squared Error (for Regression) | Accuracy, Precision, Recall, F1-score (for Classification), Mean Squared Error (for Regression) |
+| Gradient Boosting        | Various (e.g., ReLU, Sigmoid) | Gradient Boosting Loss (e.g., deviance) | Accuracy, Precision, Recall, F1-score |
+| K-Means Clustering       | Not applicable         | Inertia (Within-cluster sum of squares) | Silhouette Score, Davies-Bouldin Index |
+| K-Nearest Neighbors (KNN) | Not applicable         | Not applicable              | Accuracy, Precision, Recall, F1-score |
+| Principal Component Analysis (PCA) | Not applicable | Not applicable              | Variance Explained, Scree Plot         |
+| Kernel Principal Component Analysis (Kernel PCA) | Not applicable | Not applicable   | Variance Explained, Scree Plot         |
 
